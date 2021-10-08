@@ -1,0 +1,1 @@
+const combineLines = require('./mergeLines');
