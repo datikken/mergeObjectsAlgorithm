@@ -22,27 +22,6 @@ test('The same rows - should return array with 1 object', () => {
         "T",
         "P"
       ]
-    },
-    {
-      "ida_tag": [
-        "A",
-        "B",
-      ],
-      "ida_country": [
-        "RU"
-      ],
-      "ida_region": [
-        "A",
-        "B"
-      ],
-      "ida_os": [
-        "M",
-        "W"
-      ],
-      "na_device_format": [
-        "T",
-        "P"
-      ]
     }
   ];
   let rowB = [
@@ -496,7 +475,7 @@ test('Test rucursion', () => {
   ];
 
   const res = mergeLines(rowA, rowB[0]);
-  let recursed = recursion(res);
+  let recursed = recursion(res, mergeLines);
 
   expect(recursed.length).toBe(1)
 });

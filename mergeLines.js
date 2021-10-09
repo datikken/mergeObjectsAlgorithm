@@ -6,13 +6,13 @@ const {
 } = require('lodash')
 
 
-const recursion = (arr) => {
+const recursion = (arr, fn) => {
   let res = arr.reduce((a,b) => {
-    return mergeLines(a,b)
+    return fn(a,b)
   }, arr)
 
   if(res.length < arr.length) {
-    return recursion(res)
+    return recursion(res, fn)
   }
 
   return res
@@ -60,24 +60,6 @@ const mergeWithMask = (oldLine, newLine) => {
   let newToOld = compareBitMasks(oldLineMask, newLineMask);
   let oldToNew = compareBitMasks(newLineMask, oldLineMask);
 
-  /**
-   * можно обьединить только если:
-   *
-   * 1 есть только в одной строке
-   * 1 в каждой строке в том же ряду
-   *
-   * 0 0 0 0 0
-   * 1 0 0 0 0
-   *
-   * 0 1 0 0 0
-   * 0 1 0 0 0
-   *
-   */
-
-  if (newToOld) {
-    return mergeObjects(oldLine, newLine);
-  }
-
   if(
     newToOld
     && oldToNew
@@ -123,10 +105,6 @@ const mergeWithMask = (oldLine, newLine) => {
     !== newLineMask.indexOf(1)
   ) {
     return [oldLine, newLine]
-  }
-
-  if (oldToNew) {
-    return mergeObjects(newLine, oldLine);
   }
 
   return oldLine
