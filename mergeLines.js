@@ -37,6 +37,12 @@ const compareFields = (fieldA, fieldB) => {
 }
 
 const getBitMask = (lineA, lineB) => {
+  if(
+    Object.keys(lineA).length
+    !== Object.keys(lineB).length
+  ) {
+    throw Error('Objects are different')
+  }
   let bitMask = [];
   for (let indx in lineA) {
     bitMask.push(compareFields(lineA[indx], lineB[indx]));
