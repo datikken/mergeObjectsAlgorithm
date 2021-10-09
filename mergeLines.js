@@ -114,11 +114,11 @@ const mergeLines = (oldLines, newLine) => {
   let result = [];
   if(Array.isArray(oldLines)) {
     oldLines.map(oldLine => {
-      const rew = mergeWithMask(oldLine, newLine)
-      if (rew.length) {
-        rew.map(el => result.push(el))
+      const temp = mergeWithMask(oldLine, newLine)
+      if (Array.isArray(temp)) {
+        result = [...temp]
       } else {
-        result.push(rew)
+        result.push(temp)
       }
     });
   } else {
