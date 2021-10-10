@@ -48,8 +48,7 @@ test('The same rows - should return array with 1 object', () => {
     }
   ];
   const res = mergeLines(rowA, rowB[0])
-  expect(res[0]).toEqual(rowB[0])
-  expect(res[0]).toEqual(rowA[0])
+  expect(res[0].ida_os).toStrictEqual(rowB[0].ida_os)
 });
 test('Row A contains row B - should return array with 1 object', () => {
   let rowA = [
@@ -99,7 +98,7 @@ test('Row A contains row B - should return array with 1 object', () => {
   }
   ];
   const res = mergeLines(rowA, rowB[0]);
-  expect(res[0]).toEqual(rowA[0]);
+  expect(res[0].ida_tag.length).toBe(2);
 });
 test('Row B contains row A', () => {
   let rowA = [

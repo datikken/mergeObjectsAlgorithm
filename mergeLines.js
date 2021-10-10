@@ -5,7 +5,6 @@ const {
   isEqual,
 } = require('lodash')
 
-
 const recursion = (arr, fn) => {
   let res = arr.reduce((a,b) => {
     return fn(a,b)
@@ -23,11 +22,7 @@ const customizer = (objValue, srcValue) => {
     if(srcValue.length === 0 || objValue.length === 0) return [];
     return Array.from(new Set(objValue.concat(srcValue)));
   }
-}
-
-const mergeObjects = (objA, objB) => {
-  return mergeWith(objA, objB, customizer);
-}
+};
 
 const compareFields = (fieldA, fieldB) => {
   if(fieldA.length === 0) return 0;
@@ -81,7 +76,7 @@ const mergeWithMask = (oldLine, newLine) => {
     && !oldLineMask.includes(1)
     && newLineMask.includes(1)
   ) {
-    return mergeObjects(newLine, oldLine)
+    return mergeWith(newLine, oldLine, customizer)
   }
 
   if(
@@ -90,7 +85,7 @@ const mergeWithMask = (oldLine, newLine) => {
     && !oldLineMask.includes(1)
     && newLineMask.includes(1)
   ) {
-    return mergeObjects(oldLine, newLine)
+    return mergeWith(oldLine, newLine, customizer)
   }
 
   if(
@@ -99,7 +94,7 @@ const mergeWithMask = (oldLine, newLine) => {
     && oldLineMask.includes(1)
     && !newLineMask.includes(1)
   ) {
-    return mergeObjects(newLine, oldLine)
+    return mergeWith(newLine, oldLine, customizer)
   }
 
   if(
