@@ -3,13 +3,8 @@ const { mergeLines, recursion } = require('./mergeLines');
 test('The same rows - should return array with 1 object', () => {
   let rowA = [
     {
-      "ida_tag": [
-        "A",
-        "B"
-      ],
-      "ida_country": [
-        "RU"
-      ],
+      "ida_tag": ["A", "B"],
+      "ida_country": ["RU"],
       "ida_region": [
         "A",
         "B"
