@@ -1,9 +1,17 @@
 const {
   mergeWith,
-  isArray,
   uniqWith,
   isEqual,
 } = require('lodash')
+
+/**
+ * Считает сколько раз число встречается в массиве
+ * @param number
+ * @param numbersArr
+ * @returns {number}
+ */
+const occurrencesOfNumberInArray = (number, numbersArr) => numbersArr
+  .reduce((counter, currentNumber) => (number === currentNumber ? counter + 1 : counter), 0);
 
 /**
  * Рекурсивно вызываем .reduce
@@ -28,8 +36,11 @@ const recursion = (arr, fn) => {
  * @returns {any[]|*[]}
  */
 const customizer = (objValue, srcValue) => {
-  if (isArray(objValue)) {
-    if(srcValue.length === 0 || objValue.length === 0) return [];
+  if (Array.isArray(objValue)) {
+    if (srcValue.length === 0 || objValue.length === 0) {
+      return [];
+    }
+
     return Array.from(new Set(objValue.concat(srcValue)));
   }
 };
@@ -41,8 +52,9 @@ const customizer = (objValue, srcValue) => {
  * @returns {number|number}
  */
 const compareFields = (fieldA, fieldB) => {
-  if(fieldA.length === 0) return 0;
-  if(fieldB.length === 0) return 1;
+  if (fieldA.length === 0) return 0;
+  if (fieldB.length === 0) return 1;
+
   const result = fieldB.every(val => fieldA.includes(val));
   return result ? 0 : 1;
 };
@@ -61,6 +73,7 @@ const getBitMask = (lineA, lineB) => {
   ) {
     throw Error('Objects are different');
   }
+
   const bitMask = [];
   for (const indx in lineA) {
     if (indx) {
@@ -86,7 +99,7 @@ const compareBitMasks = (maskA, maskB) => {
 };
 
 /**
- * Принимает два обьекта и сливает 1 в другой или наоборот
+ * Принимает два обьекта и сливает 1 в другой или наоборот или возвращает как есть
  * @param oldLine
  * @param newLine
  * @returns {*[]|*}
@@ -99,12 +112,19 @@ const mergeWithMask = (oldLine, newLine) => {
   const oldToNew = compareBitMasks(newLineMask, oldLineMask);
 
   if (
+    occurrencesOfNumberInArray(1, oldLineMask) > 1
+    && occurrencesOfNumberInArray(1, newLineMask) > 1
+  ) {
+    return [oldLine, newLine];
+  }
+
+  if (
     newToOld
     && oldToNew
     && !oldLineMask.includes(1)
     && !newLineMask.includes(1)
   ) {
-    return [oldLine, newLine];
+    return mergeWith(oldLine, newLine, customizer);
   }
 
   if (
@@ -145,6 +165,17 @@ const mergeWithMask = (oldLine, newLine) => {
     return [oldLine, newLine];
   }
 
+  if (
+    newToOld
+    && oldToNew
+    && newLineMask.includes(1)
+    && oldLineMask.includes(1)
+    && oldLineMask.indexOf(1)
+    === newLineMask.indexOf(1)
+  ) {
+    return mergeWith(oldLine, newLine, customizer);
+  }
+
   return oldLine;
 };
 
@@ -156,11 +187,12 @@ const mergeWithMask = (oldLine, newLine) => {
  */
 const mergeLines = (oldLines, newLine) => {
   let result = [];
+
   if (Array.isArray(oldLines)) {
     oldLines.forEach(oldLine => {
       const temp = mergeWithMask(oldLine, newLine);
       if (Array.isArray(temp)) {
-        result = [...temp];
+        result = [...result, ...temp];
       } else {
         result.push(temp);
       }
@@ -174,5 +206,5 @@ const mergeLines = (oldLines, newLine) => {
 
 module.exports = {
   recursion,
-  mergeLines
-}
+  mergeLines,
+};
